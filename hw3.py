@@ -1,7 +1,6 @@
 import torch
 import scipy.io
 import numpy as np
-import matplotlib.pyplot as plt
 from collections import *
 from sklearn.utils import shuffle
 from sklearn.preprocessing import StandardScaler
@@ -19,7 +18,7 @@ def get_variance_and_kernel(X):
           sum += squared_norm
           temp[j] = -1*squared_norm
       K[i] = temp
-      print(i)
+      #print(i)
 
     variance = sum/np.square(len(X))
     K = K/(2*variance)
@@ -36,7 +35,7 @@ def get_test_kernel(test_data,train_data,var):
             squared_norm = np.square(np.linalg.norm(test_data[i]-train_data[j]))
             temp[j] = np.exp(-1*squared_norm/(2*var))
         K_test[i] = temp
-        print(i)
+        #print(i)
     return K_test
 
 def sigmoid(v):
@@ -74,7 +73,7 @@ def get_accuracy(w,inputs,labels):
     
     return count/len(labels)
 
-mat = scipy.io.loadmat('./data1.mat')
+mat = scipy.io.loadmat('/ext3/Homework/data1.mat')
 
 train_data = mat['TrainingX']
 train_label = mat['TrainingY']
@@ -115,7 +114,8 @@ y_test = y_test.to(device)
 cost_log = []
 w = torch.randn((10000,1),requires_grad=True,device=device)
 
-lr = 5e-7
+lr = 1e-7
+count = 0
 while True:
     cost = cost_function(w,X_train,y_train,c=1)
     cost.backward()
@@ -123,7 +123,8 @@ while True:
     n = torch.norm(w.grad.data,2)
     cost_log.append(cost)
     w.grad.data.zero_()
-    print(n)
+    if count%50000 == 0:
+        print(n)
     if n < 1e-5:
       break
 
