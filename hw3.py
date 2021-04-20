@@ -80,23 +80,26 @@ train_label = mat['TrainingY']
 test_data = mat['TestX']
 test_label = mat['TestY']
 
-if os.path.isfile('./kernel_data/K_train.npy'):
-    print ("File exist")
-    K_train = np.load('./kernel_data/K_train')
-else:
-    var, K_train = get_variance_and_kernel(train_data)
-    if not os.path.isdir('kernel_data'):
-        os.mkdir('kernel_data')
-    np.save('./kernel_data/K_train',K_train)
+# if os.path.isfile('./kernel_data/K_train.npy'):
+#     print ("File exist")
+#     K_train = np.load('./kernel_data/K_train')
+# else:
+#     var, K_train = get_variance_and_kernel(train_data)
+#     if not os.path.isdir('kernel_data'):
+#         os.mkdir('kernel_data')
+#     np.save('./kernel_data/K_train',K_train)
 
-if os.path.isfile('./kernel_data/K_test.npy'):
-    print ("File exist")
-    K_test = np.load('./kernel_data/K_test')
-else:
-    K_test = get_test_kernel(test_data,train_data,var)
-    if not os.path.isdir('kernel_data'):
-        os.mkdir('kernel_data')
-    np.save('./kernel_data/K_test',K_test)
+# if os.path.isfile('./kernel_data/K_test.npy'):
+#     print ("File exist")
+#     K_test = np.load('./kernel_data/K_test')
+# else:
+#     K_test = get_test_kernel(test_data,train_data,var)
+#     if not os.path.isdir('kernel_data'):
+#         os.mkdir('kernel_data')
+#     np.save('./kernel_data/K_test',K_test)
+
+K_train = np.load('/ext3/kernel_data/K_train.npy')
+K_test = np.load('/ext3/kernel_data/K_test.npy')
 
 X_train = torch.from_numpy(K_train).type(torch.FloatTensor)
 y_train = torch.from_numpy(train_label).type(torch.FloatTensor)
@@ -113,7 +116,7 @@ y_test = y_test.to(device)
 
 cost_log = []
 w = torch.randn((10000,1),requires_grad=True,device=device)
-
+print('start')
 lr = 1e-7
 count = 0
 while True:
